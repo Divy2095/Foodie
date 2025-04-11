@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fff9f5;
+    color: #333;
+  }
+  
+  /* Hero Section */
+  .hero {
+    background: url('https://images.unsplash.com/photo-1543353071-873f17a7a088') center/cover no-repeat;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .hero-overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    padding: 50px;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+  }
+  
+  .hero-left h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+  
+  .form-card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    width: 320px;
+    color: #333;
+  }
+  
+  .form-card h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .form-card input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  .form-card button {
+    width: 100%;
+    background-color: #ff6600;
+    color: white;
+    padding: 12px;
+    border: none;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .form-card button:hover {
+    background-color: #e65300;
+  }
+  
+  .form-card small {
+    display: block;
+    margin-top: 10px;
+    font-size: 12px;
+  }
+  
+  .form-card a {
+    color: #ff6600;
+    text-decoration: none;
+  }
+  
+  /* Info Section */
+  .info-section {
+    display: flex;
+    justify-content: space-around;
+    padding: 50px 30px;
+    flex-wrap: wrap;
+    background-color: #fff;
+  }
+  
+  .steps, .docs {
+    background: #fefefe;
+    padding: 30px;
+    border-radius: 20px;
+    width: 45%;
+    min-width: 300px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  .steps ul, .docs ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 20px;
+  }
+  
+  .steps li, .docs li {
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+  
+  .docs a {
+    color: red;
+    font-weight: 500;
+  }
+  

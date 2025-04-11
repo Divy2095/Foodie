@@ -1,0 +1,294 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #333;
+    overflow-x: hidden;
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px; /* Increased padding for better spacing */
+    background: linear-gradient(90deg, #ff5722, #ff8a50);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease-in-out;
+}
+
+.navbar:hover {
+    background: linear-gradient(90deg, #ff8a50, #ff5722);
+}
+
+.navbar .logo {
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 40px; /* Increased gap between menu items */
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul li {
+    position: relative;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    font-size: 18px; /* Increased font size for better readability */
+    padding: 10px 20px; /* Adjusted padding for better shape */
+    border-radius: 10px; /* Rounded corners for consistent shape */
+    transition: all 0.3s ease-in-out;
+    display: inline-block; /* Ensures the shape is consistent */
+}
+
+.navbar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.3); /* Subtle background on hover */
+    color: white;
+    transform: scale(1.05); /* Slight scaling for hover effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Adds a shadow on hover */
+}
+
+/* Add a hover underline effect */
+.navbar ul li a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width 0.3s;
+    margin: auto;
+}
+
+.navbar ul li a:hover::after {
+    width: 100%;
+}
+
+/* Login Button Styling */
+.navbar ul li .login-btn {
+    background-color: white;
+    color: #ff5722;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.navbar ul li .login-btn:hover {
+    background-color: #ff8a50;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Hero Section */
+.hero {
+    background: url('../images/top-view-circular-food-frame.jpg') no-repeat center center/cover; /* Add your background image */
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+.hero-content {
+    animation: fadeIn 2s ease-in-out;
+    background: rgba(0, 0, 0, 0.5); /* Add a semi-transparent overlay for better text visibility */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.search-input {
+    padding: 12px 15px;
+    font-size: 16px;
+    width: 300px;
+    border: 2px solid #ff5722; /* Add a border */
+    border-radius: 25px; /* Rounded corners */
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-input:focus {
+    border-color: #ff8a50; /* Change border color on focus */
+    box-shadow: 0 0 8px rgba(255, 87, 34, 0.5); /* Add a glow effect */
+}
+
+.search-btn {
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-btn:hover {
+    background-color: #e64a19;
+    transform: scale(1.05); /* Slight scaling effect */
+}
+
+/* Features Section */
+.features {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    flex-wrap: wrap; /* Ensures responsiveness */
+    gap: 20px; /* Adds spacing between items */
+}
+
+.feature {
+    text-align: center;
+    max-width: 300px;
+    flex: 1; /* Makes items flexible for responsiveness */
+}
+
+.feature img {
+    width: 150px; /* Set a fixed width */
+    height: 150px; /* Set a fixed height */
+    object-fit: cover; /* Ensures the image fits within the dimensions */
+    margin-bottom: 15px;
+    border-radius: 10px; /* Adds rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature img:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Enhances shadow on hover */
+}
+
+.feature h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #ff5722;
+    font-weight: bold;
+}
+
+.feature p {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Food Section */
+.food-section {
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.food-section h2 {
+    font-size: 28px;
+    color: #ff5722;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.food-container {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
+    gap: 20px;
+    max-height: 400px; 
+    overflow-y: auto; 
+    padding: 10px;
+}
+
+.food-item {
+    width: 120px; 
+    text-align: center;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.food-item img {
+    width: 100%; 
+    height: 100px; 
+    object-fit: cover;
+    border-radius: 10px 10px 0 0; 
+}
+
+.food-item p {
+    font-size: 14px;
+    color: #333;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.food-item:hover {
+    transform: scale(1.05); /* Slight zoom effect on hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Enhances shadow on hover */
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
