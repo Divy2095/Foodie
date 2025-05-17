@@ -28,12 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
             userMenu.style.display = 'none';
             cartIcon.style.display = 'none';
         }
-    });
-
-    // Toggle dropdown menu
+    });    // Toggle dropdown menu
     if (userMenuBtn) {
         userMenuBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             const dropdown = document.querySelector('.dropdown-menu');
             dropdown.classList.toggle('show');
         });
@@ -41,11 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
-        if (!e.target.closest('.user-menu')) {
-            const dropdown = document.querySelector('.dropdown-menu');
-            if (dropdown && dropdown.classList.contains('show')) {
-                dropdown.classList.remove('show');
-            }
+        const dropdown = document.querySelector('.dropdown-menu');
+        const userMenu = document.querySelector('.user-menu');
+        
+        if (dropdown && !userMenu.contains(e.target)) {
+            dropdown.classList.remove('show');
         }
     });
 
