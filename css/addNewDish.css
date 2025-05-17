@@ -70,11 +70,50 @@ body {
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
 }
 
 .submit-btn:hover {
   background-color: #ff3b2e;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 111, 97, 0.3);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 111, 97, 0.3);
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.5s ease;
+}
+
+.submit-btn:active::before {
+  width: 300%;
+  height: 300%;
+}
+
+.submit-btn.submitting {
+  background-color: #ff8577;
+  animation: pulse 1.5s infinite;
+  pointer-events: none;
+}
+
+.loading-spinner {
+  animation: spin 1s infinite linear;
+  margin-left: 8px;
 }
 
 /* Animations */
@@ -86,4 +125,15 @@ body {
 @keyframes slideUp {
   0% { transform: translateY(30px); opacity: 0; }
   100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.97); }
+  100% { transform: scale(1); }
 }

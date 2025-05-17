@@ -1,112 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Add New Dish</title>
-  <link rel="stylesheet" href="css/addNewDish.css" />
-  <script type="module" src="js/addNewDish.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Add New Dish</title>
+    <link rel="stylesheet" href="css/addNewDish.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <h1 class="title">Add a New Dish</h1>
-    <form class="dish-form" id="dishForm">
-      <div class="form-group">
-        <label for="dishName">Dish Name</label>
-        <input type="text" id="dishName" placeholder="e.g. Spicy Paneer Tikka" required />
-      </div>
-      <div class="form-group">
-        <label for="price">Price (₹)</label>
-        <input type="number" id="price" placeholder="e.g. 199" required />
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea id="description" rows="4" placeholder="Describe the dish..." required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="image">Dish Image</label>
-        <input type="file" id="image" accept="image/*" required />
-      </div>
-      <button type="submit" class="submit-btn">Add Dish</button>
-    </form>
-  </div>
-
-  <script type="module" src="js/addNewDish.js">
-    // Import Firebase Firestore
-    import { db } from './FirebaseConfig.js';
-    import {
-      collection,
-      getDocs,
-      updateDoc,
-      arrayUnion,
-      doc
-    } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
-
-    // Import Cloudinary config
-    import {
-      CLOUDINARY_UPLOAD_PRESET,
-      CLOUDINARY_CLOUD_NAME,
-      CLOUDINARY_API_URL
-    } from './CloudinaryConfig.js';
-
-    document.getElementById('dishForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const dishName = document.getElementById('dishName').value.trim();
-      const price = document.getElementById('price').value.trim();
-      const description = document.getElementById('description').value.trim();
-      const imageFile = document.getElementById('image').files[0];
-
-      if (!imageFile) {
-        alert("Please select an image.");
-        return;
-      }
-
-      try {
-        // Upload image to Cloudinary
-        const formData = new FormData();
-        formData.append("file", imageFile);
-        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
-
-        const cloudRes = await fetch(CLOUDINARY_API_URL, {
-          method: 'POST',
-          body: formData
-        });
-
-        const cloudData = await cloudRes.json();
-        const imageUrl = cloudData.secure_url;
-
-        // New dish object
-        const newDish = {
-          name: dishName,
-          price: parseFloat(price),
-          description,
-          imageUrl
-        };
-
-        console.log(newDish);
-        // Add newDish to each restaurant's menu
-        const restaurantCollection = collection(db, "restaurants");
-        const restaurantSnapshot = await getDocs(restaurantCollection);
-
-        const updates = restaurantSnapshot.docs.map(async (restaurantDoc) => {
-          const restaurantRef = doc(db, "restaurants", restaurantDoc.id);
-          await updateDoc(restaurantRef, {
-            menu: arrayUnion(newDish)
-          });
-        });
-
-      let data=  await Promise.all(updates);
-      console.log(updates);
-
-        alert("Dish added successfully to all restaurants.");
-        document.getElementById('dishForm').reset();
-      } catch (error) {
-        console.error("Error adding new dish:", error);
-        alert("Something went wrong. Check console for details.");
-      }
-    });
-  </script>
-
+    <div class="container">
+        <h1 class="title">Add a New Dish</h1>
+        <form class="dish-form" id="dishForm">
+            <div class="form-group">
+                <label for="dishName">Dish Name</label>
+                <input type="text" id="dishName" placeholder="e.g. Spicy Paneer Tikka" required />
+            </div>
+            <div class="form-group">
+                <label for="price">Price (₹)</label>
+                <input type="number" id="price" placeholder="e.g. 199" min="0" step="0.01" required />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" rows="4" placeholder="Describe the dish..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="image">Dish Image</label>
+                <input type="file" id="image" accept="image/*" required />
+            </div>
+            <button type="submit" class="submit-btn">
+                <span class="button-text">Add Dish</span>
+                <i class="fas fa-spinner fa-spin loading-spinner" style="display: none;"></i>
+            </button>
+        </form>
+    </div>
+    <script type="module" src="js/addNewDish.js"></script>
 </body>
 </html>

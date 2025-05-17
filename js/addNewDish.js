@@ -12,10 +12,24 @@ import {
   CLOUDINARY_API_URL
 } from './CloudinaryConfig.js';
 
-document.getElementById('dishForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('dishForm');
+    const submitBtn = form.querySelector('.submit-btn');
+    const buttonText = submitBtn.querySelector('.button-text');
+    const loadingSpinner = submitBtn.querySelector('.loading-spinner');
 
-  const dishName = document.getElementById('dishName').value.trim();
+    const setLoading = (isLoading) => {
+        submitBtn.disabled = isLoading;
+        submitBtn.classList.toggle('submitting', isLoading);
+        buttonText.style.display = isLoading ? 'none' : 'inline';
+        loadingSpinner.style.display = isLoading ? 'inline' : 'none';
+    };
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        const dishName = document.getElementById('dishName').value.trim();
   const price = document.getElementById('price').value.trim();
   const description = document.getElementById('description').value.trim();
   const imageFile = document.getElementById('image').files[0];
@@ -62,13 +76,20 @@ document.getElementById('dishForm').addEventListener('submit', async (e) => {
     // Update the restaurant's menu with the new dish
     await updateDoc(restaurantRef, {
       menu: arrayUnion(newDish)
+    });            // Show success message
+            form.reset();
+            alert("Dish added successfully!");
+            
+            // Add a small delay before redirect for better UX
+            setTimeout(() => {
+                window.location.href = 'adminDashboard.html';
+            }, 500);
+
+        } catch (error) {
+            console.error("Error adding new dish:", error);
+            alert(error.message || "Failed to add dish. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     });
-
-    alert("Dish added successfully to the selected restaurant.");
-    document.getElementById('dishForm').reset();
-
-  } catch (error) {
-    console.error("Error adding new dish:", error);
-    alert("Something went wrong. Check console for details.");
-  }
 });

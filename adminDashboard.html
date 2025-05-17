@@ -3,52 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Delivery</title>
-    <link rel="stylesheet" href="css/homepage.css">
-    <script type="module" src="js/adminDashboard.js"></script>
+    <title>Restaurant Dashboard - Foodie</title>
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/adminDashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header class="navbar">
-        <div class="logo">Foodie</div>
+        <div class="logo">
+            <i class="fas fa-utensils"></i>
+            <span>Foodie Partner</span>
+        </div>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Menu</a></li>
-                <li><a href="addNewDish.html">Add New Dish</a></li>
-                <li><a href="#">Offers</a></li>
-                <li><a href="login.html" class="login-btn">Login</a></li>
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="#">Orders</a></li>
+                <li><a href="#">Analytics</a></li>
+                <li class="user-menu">
+                    <a href="#" id="userMenuBtn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="restaurantName">Loading...</span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" id="profileBtn"><i class="fas fa-store"></i> Restaurant Profile</a>
+                        <a href="#" id="settingsBtn"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
             </ul>
         </nav>
-    </header>
+    </header>    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Restaurant Dashboard</h1>
+            <a href="addNewDish.html" class="add-dish-btn">
+                <i class="fas fa-plus"></i>
+                Add New Dish
+            </a>
+        </div>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Delicious Food Delivered to Your Doorstep</h1>
-            <p>Order your favorite meals from the best restaurants in town.</p>
-            <div class="search-container">
-                <input type="search" placeholder="Search for food..." class="search-input">
-                <button class="search-btn">Search</button>
+        <div class="restaurant-info">
+            <h2>Quick Overview</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h3>Total Dishes</h3>
+                    <p id="totalDishes">0</p>
+                </div>
+                <div class="info-item">
+                    <h3>Today's Orders</h3>
+                    <p id="todayOrders">0</p>
+                </div>
+                <div class="info-item">
+                    <h3>Total Revenue</h3>
+                    <p id="totalRevenue">₹0</p>
+                </div>
+                <div class="info-item">
+                    <h3>Rating</h3>
+                    <p id="rating">0.0 ⭐</p>
+                </div>
             </div>
         </div>
-    </section>
 
-    <section class="features">
-        <div class="feature">
-            <img src="images/Online_Shoping_29.jpg" alt="Fast Delivery">
-            <h3>Fast Delivery</h3>
-            <p>Get your food delivered in under 30 minutes.</p>
+        <div class="menu-section">
+            <div class="menu-header">
+                <h2>Your Menu</h2>
+                <div class="menu-actions">
+                    <input type="search" id="searchDish" placeholder="Search dishes..." class="search-input">
+                </div>
+            </div>
+            <div class="menu-grid" id="menuGrid">
+                <!-- Menu items will be dynamically added here -->
+            </div>
         </div>
-        <div class="feature">
-            <img src="images/6993310.jpg" alt="Quality Food">
-            <h3>Quality Food</h3>
-            <p>Only the best restaurants and chefs.</p>
-        </div>
-        <div class="feature">
-            <img src="images/5739256.jpg" alt="Easy to Order">
-            <h3>Easy to Order</h3>
-            <p>Simple and intuitive ordering process.</p>
-        </div>
-    </section>
+    </div>
+
+    <script type="module" src="js/nav.js"></script>
 
    
 
