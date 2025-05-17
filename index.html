@@ -1,21 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+<head>    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Delivery</title>
     <link rel="stylesheet" href="css/homepage.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-    <header class="navbar">
-        <div class="logo">Foodie</div>
+<body>    <header class="navbar">
+        <div class="logo">
+            <i class="fas fa-utensils"></i>
+            <span>Foodie</span>
+        </div>
         <nav>
             <ul>
                 <li><a href="#">Home</a></li>
                 <li><a href="#">Menu</a></li>
                 <li><a href="#">Offers</a></li>
                 <li><a href="./adminform.html">Partner with Us</a></li>
-                <li><a href="login.html" class="login-btn">Login</a></li>
+                <li class="cart-icon" style="display: none;">
+                    <a href="#" id="cartBtn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                </li>
+                <li class="user-menu" style="display: none;">
+                    <a href="#" id="userMenuBtn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName"></span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" id="myOrders">My Orders</a>
+                        <a href="#" id="myProfile">My Profile</a>
+                        <a href="#" id="logoutBtn">Logout</a>
+                    </div>
+                </li>
+                <li class="auth-buttons">
+                    <a href="login.html" class="login-btn">Login</a>
+                </li>
             </ul>
         </nav>
     </header>

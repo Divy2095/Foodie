@@ -1,0 +1,117 @@
+.navbar {
+    background: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navbar .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #ff5722;
+}
+
+.navbar .logo i {
+    font-size: 28px;
+}
+
+nav ul {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+}
+
+nav a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ff5722;
+}
+
+.cart-icon {
+    position: relative;
+}
+
+.cart-icon i {
+    font-size: 20px;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff5722;
+    color: white;
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-menu {
+    position: relative;
+}
+
+.user-menu #userMenuBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-menu i {
+    font-size: 20px;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 8px 0;
+    min-width: 180px;
+    display: none;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 16px;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f5f5f5;
+}
+
+.login-btn {
+    background: #ff5722;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.login-btn:hover {
+    background: #f4511e;
+}

@@ -3,20 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
+  <title>Login - Foodie</title>
   <link rel="stylesheet" href="./css/login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
-    <div class="login-box">
-      <h1>Welcome Back</h1>
-      <p>More than 1000 recipes from around the world!</p>
-      <div class="login-container">
-        <input type="text" placeholder="Enter your email" class="login-input" />
-        <input type="password" placeholder="Enter your password" class="login-input" />
-        <a href="index.html" class="login-btn">Login</a>
+    <div class="forms-container">
+      <div class="login-form">
+        <div class="brand">
+          <i class="fas fa-utensils"></i>
+          <h2>Foodie</h2>
+        </div>
+        <h1>Welcome Back!</h1>
+        <p class="subtitle">Enter your credentials to access your account</p>
+        
+        <form id="loginForm">
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="Email Address" required />
+          </div>
+          
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Password" required />
+            <i class="fas fa-eye-slash toggle-password"></i>
+          </div>
+          
+          <div class="options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember">
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+          </div>
+            <button type="submit" id="loginBtn" class="login-btn">
+            <span>Login</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </form>
+        
+        <p class="signup-prompt">
+          Don't have an account? <a href="signup.html">Sign up</a>
+        </p>
+      </div>
+    </div>
+    
+    <div class="image-container">
+      <div class="content">
+        <h2>Delicious food at your doorstep</h2>
+        <p>Order your favorite meals from the best restaurants in town.</p>
       </div>
     </div>
   </div>
+  
+  <script type="module" src="js/login.js"></script>
 </body>
 </html>

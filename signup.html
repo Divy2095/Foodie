@@ -3,22 +3,74 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up</title>
+  <title>Sign Up - Foodie</title>
   <link rel="stylesheet" href="./css/signup.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
-    <div class="signup-box">
-      <h1>Create Account</h1>
-      <p>Join thousands of food lovers around the globe!</p>
-      <div class="signup-container">
-        <input type="text" placeholder="Enter your name" class="signup-input" />
-        <input type="email" placeholder="Enter your email" class="signup-input" />
-        <input type="password" placeholder="Create a password" class="signup-input" />
-        <input type="password" placeholder="Confirm password" class="signup-input" />
-        <a href="index.html" class="signup-btn">Sign Up</a>
+    <div class="image-container">
+      <div class="content">
+        <h2>Join our food community</h2>
+        <p>Get access to exclusive deals and order from the best restaurants in your area.</p>
+      </div>
+    </div>
+
+    <div class="forms-container">
+      <div class="signup-form">
+        <div class="brand">
+          <i class="fas fa-utensils"></i>
+          <h2>Foodie</h2>
+        </div>
+        <h1>Create Account</h1>
+        <p class="subtitle">Join thousands of food lovers around the globe!</p>
+        
+        <form id="signupForm">          <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="name" placeholder="Full Name" required />
+            <div class="input-requirements">2+ characters required</div>
+          </div>
+          
+          <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="Email Address" required />
+            <div class="input-requirements">Valid email address required</div>
+          </div>
+          
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Password" required />
+            <i class="fas fa-eye-slash toggle-password"></i>
+            <div class="input-requirements">6+ characters with letters and numbers</div>
+          </div>
+          
+          <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+            <i class="fas fa-eye-slash toggle-password"></i>
+            <div class="input-requirements">Must match password</div>
+          </div>
+          
+          <div class="terms">
+            <label>
+              <input type="checkbox" required>
+              <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+            </label>
+          </div>
+            <button type="submit" id="signupBtn" class="signup-btn">
+            <span>Create Account</span>
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </form>
+        
+        <p class="login-prompt">
+          Already have an account? <a href="login.html">Login</a>
+        </p>
       </div>
     </div>
   </div>
+  
+  <script type="module" src="js/signup.js"></script>
 </body>
 </html>
