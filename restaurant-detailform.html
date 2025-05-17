@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Restaurant Details</title>
+  <link rel="stylesheet" href="./css/restaurant-detailform.css"/>
+  <script type="module" src="./js/restaurant-detailform.js"></script>
+
+</head>
+<body>
+  <div class="form-container">
+    <h2>Restaurant Information</h2>
+    <form id="restaurantForm">
+      <div class="input-group">
+        <label for="name">Restaurant Name</label>
+        <input type="text" id="name" required />
+      </div>
+      <div class="input-group">
+        <label for="address">Address</label>
+        <textarea id="address" rows="3" required></textarea>
+      </div>
+      <div class="input-group">
+        <label for="contact">Contact Number</label>
+        <input type="tel" id="contact" required />
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="open">Opening Time</label>
+          <input type="time" id="open" required />
+        </div>
+        <div class="input-group">
+          <label for="close">Closing Time</label>
+          <input type="time" id="close" required />
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="image">Restaurant Image</label>
+        <input type="file" id="image" accept="image/*" />
+      </div>
+      <button type="submit">Next</button>
+    </form>
+  </div>
+
+  
+</body>
+</html>

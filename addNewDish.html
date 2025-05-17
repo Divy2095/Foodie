@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add New Dish</title>
+  <link rel="stylesheet" href="css/addNewDish.css" />
+  <script type="module" src="js/addNewDish.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Add a New Dish</h1>
+    <form class="dish-form" id="dishForm">
+      <div class="form-group">
+        <label for="dishName">Dish Name</label>
+        <input type="text" id="dishName" placeholder="e.g. Spicy Paneer Tikka" required />
+      </div>
+      <div class="form-group">
+        <label for="price">Price (₹)</label>
+        <input type="number" id="price" placeholder="e.g. 199" required />
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" rows="4" placeholder="Describe the dish..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="image">Dish Image</label>
+        <input type="file" id="image" accept="image/*" required />
+      </div>
+      <button type="submit" class="submit-btn">Add Dish</button>
+    </form>
+  </div>
+
+  
+</body>
+</html>

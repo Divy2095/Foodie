@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foodie Partner Signup</title>
   <link rel="stylesheet" href="./css/adminform.css" />
+  <script type="module" src="js/adminform.js"></script>
+
 </head>
 <body>
   <section class="hero">
@@ -16,9 +18,13 @@
       <div class="form-card">
         <h2>Get Started</h2>
         <p>Enter a mobile number or restaurant ID to continue</p>
-        <input type="text" placeholder="Enter Restaurant ID / Mobile number" />
-        <button>Continue</button>
-        <small>By logging in, I agree to Foodie's <a href="#">terms & conditions</a></small>
+        <input type="text" placeholder="Enter Restaurant ID / Mobile number" id="contact"/>
+        <button id="continueBtn">Continue</button>
+
+        <small>
+          By logging in, I agree to Foodie's <a href="#">terms & conditions</a><br>
+          For Signup, <a href="restaurant-detailform.html" id="newJoinBtn">click here</a>
+        </small>
       </div>
     </div>
   </section>
