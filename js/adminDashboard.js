@@ -153,27 +153,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
             return;
-        }
-
-        // Sort menu by most recently added
+        }        // Sort menu by most recently added
         const sortedMenu = [...menu].sort((a, b) => 
             new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
         );
 
-        sortedMenu.forEach((dish, index) => {
+        // Create a map of sorted indices to original indices
+        const indexMap = menu.reduce((map, dish, index) => {
+            const sortedIndex = sortedMenu.findIndex(d => d === dish);
+            map[sortedIndex] = index;
+            return map;
+        }, {});
+
+        sortedMenu.forEach((dish, sortedIndex) => {
             const dishCard = document.createElement('div');
             dishCard.className = 'dish-card';
             
-            dishCard.innerHTML = `
-                <div class="dish-image-container">
-                    <img src="${dish.imageUrl || 'https://via.placeholder.com/300x180?text=No+Image'}" 
+            dishCard.innerHTML = `                <div class="dish-image-container">
+                    <img src="${dish.imageUrl || 'images/placeholder.jpg'}" 
                          alt="${dish.name}" 
                          class="dish-image"
-                         onload="this.classList.add('loaded')"
                          onerror="this.src='images/placeholder.jpg'">
-                    <div class="image-loading-spinner">
-                        <i class="fas fa-spinner fa-spin"></i>
-                    </div>
                 </div>
                 <div class="dish-info">
                     <h3 class="dish-name">${dish.name}</h3>
@@ -188,14 +188,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
-            `;
-
-            // Add event listeners
+            `;            // Add event listeners
             const editBtn = dishCard.querySelector('.edit-btn');
             const deleteBtn = dishCard.querySelector('.delete-btn');
             
-            editBtn.addEventListener('click', () => window.editDish(index));
-            deleteBtn.addEventListener('click', () => window.deleteDish(index));
+            // Use the original index from our map
+            const originalIndex = indexMap[sortedIndex];
+            editBtn.addEventListener('click', () => window.editDish(originalIndex));
+            deleteBtn.addEventListener('click', () => window.deleteDish(originalIndex));
             
             menuGrid.appendChild(dishCard);
         });
@@ -222,9 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             console.error("Error refreshing dashboard:", error);
         }
-    };
-
-    window.editDish = async (index) => {
+    };    window.editDish = async (index) => {
         try {
             const restaurantId = localStorage.getItem("restaurantid");
             if (!restaurantId) return;
@@ -234,9 +232,11 @@ document.addEventListener("DOMContentLoaded", () => {
             
             if (menu && menu[index]) {
                 const dishToEdit = menu[index];
+                // Store both index and dish data
+                localStorage.setItem('isEditing', 'true');
                 localStorage.setItem('editDishIndex', index.toString());
                 localStorage.setItem('editDishData', JSON.stringify(dishToEdit));
-                window.location.href = 'addNewDish.html?edit=true';
+                window.location.href = 'addNewDish.html';
             }
         } catch (error) {
             console.error("Error preparing dish for edit:", error);
