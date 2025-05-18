@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Foodie</title>
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/orders.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <i class="fas fa-utensils"></i>
+            <span>Foodie</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Menu</a></li>
+                <li><a href="#">Offers</a></li>
+                <li class="cart-icon">
+                    <a href="#" id="cartBtn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                </li>
+                <li class="user-menu">
+                    <a href="#" id="userMenuBtn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName"></span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="orders.html" class="active"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                        <a href="#" id="myProfile"><i class="fas fa-user"></i> My Profile</a>
+                        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="orders-container">
+        <h1>My Orders</h1>
+        
+        <div class="orders-filter">
+            <select id="orderFilter">
+                <option value="all">All Orders</option>
+                <option value="today">Today's Orders</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+            </select>
+        </div>
+
+        <div class="orders-grid" id="ordersGrid">
+            <!-- Orders will be loaded here -->
+            <div class="loading-orders">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading your orders...</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="js/nav.js"></script>
+    <script type="module" src="js/orders.js"></script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+:root {
+    --primary-color: #ff5722;
+    --primary-dark: #f4511e;
+    --text-color: #333;
+    --text-light: #666;
+    --gray-light: #f5f5f5;
+    --border-color: #e0e0e0;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+}
+
+.orders-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+h1 {
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.orders-filter {
+    margin-bottom: 2rem;
+}
+
+.orders-filter select {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background-color: white;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.orders-filter select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.orders-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.order-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    border: 1px solid var(--border-color);
+}
+
+.order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.order-id {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.order-status {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.status-paid {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.status-pending {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.status-cancelled {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.order-info {
+    padding: 1.5rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.order-restaurant,
+.order-datetime,
+.delivery-status,
+.order-address {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: var(--text-light);
+}
+
+.order-info i {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-top: 0.2rem;
+}
+
+.order-items {
+    padding: 1.5rem;
+    background-color: var(--gray-light);
+    margin: 0 1.5rem;
+    border-radius: 8px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.order-delivery {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+    border-top: 1px dashed var(--border-color);
+    color: var(--text-light);
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--border-color);
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.loading-orders,
+.empty-orders {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-light);
+}
+
+.loading-orders i,
+.empty-orders i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--border-color);
+}
+
+@media (max-width: 768px) {
+    .orders-container {
+        padding: 1rem;
+        margin: 1rem auto;
+    }
+
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .order-info {
+        padding: 1rem;
+    }
+
+    .order-items {
+        padding: 1rem;
+        margin: 0 1rem;
+    }
+}

@@ -15,18 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, (user) => {
         if (user) {
             // User is signed in
-            authButtons.style.display = 'none';
-            userMenu.style.display = 'block';
-            cartIcon.style.display = 'block';
-            userName.textContent = user.displayName || 'User';
+            if (authButtons) authButtons.style.cssText = 'display: none !important';
+            if (userMenu) userMenu.style.cssText = 'display: block !important';
+            if (cartIcon) cartIcon.style.cssText = 'display: block !important';
+            if (userName) userName.textContent = user.displayName || 'User';
 
             // Get cart count from localStorage or set to 0
-            cartCount.textContent = localStorage.getItem('cartCount') || '0';
+            if (cartCount) cartCount.textContent = localStorage.getItem('cartCount') || '0';
         } else {
             // User is signed out
-            authButtons.style.display = 'block';
-            userMenu.style.display = 'none';
-            cartIcon.style.display = 'none';
+            if (authButtons) authButtons.style.cssText = 'display: block !important';
+            if (userMenu) userMenu.style.cssText = 'display: none !important';
+            if (cartIcon) cartIcon.style.cssText = 'display: none !important';
         }
     });    // Toggle dropdown menu
     if (userMenuBtn) {
@@ -35,6 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             const dropdown = document.querySelector('.dropdown-menu');
             dropdown.classList.toggle('show');
+        });
+    }
+
+    // Handle My Orders click
+    const myOrders = document.getElementById('myOrders');
+    if (myOrders) {
+        myOrders.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'orders.html';
         });
     }
 
