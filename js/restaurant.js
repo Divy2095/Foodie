@@ -288,14 +288,7 @@ function handleCheckout() {
         alert('Please add items to your cart before checking out');
         return;
     }
-    
-    // Here you would typically:
-    // 1. Check if user is logged in
-    // 2. Get delivery address
-    // 3. Process payment
-    // 4. Create order in database
-    
-    alert('Checkout functionality coming soon!');
+    window.location.href = 'payment.html';
 }
 
 // Make functions available globally

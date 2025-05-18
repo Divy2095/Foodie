@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Food Delivery</title>
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/payment.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <i class="fas fa-utensils"></i>
+            <span>Foodie</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Menu</a></li>
+                <li><a href="#">Offers</a></li>
+                <li><a href="./adminform.html">Partner with Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="payment-container">
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div id="orderItems"></div>
+            <div class="total-section">
+                <div class="subtotal">
+                    <span>Subtotal:</span>
+                    <span id="subtotal"></span>
+                </div>
+                <div class="delivery-fee">
+                    <span>Delivery Fee:</span>
+                    <span>₹40.00</span>
+                </div>
+                <div class="total">
+                    <span>Total:</span>
+                    <span id="total"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-section">
+            <h2>Payment Details</h2>
+            <form id="paymentForm" class="payment-form">
+                <div class="form-group">
+                    <label for="name">Cardholder Name</label>
+                    <input type="text" id="name" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="card">Card Number</label>
+                    <input type="text" id="card" required placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expiry">Expiry Date</label>
+                        <input type="text" id="expiry" required placeholder="MM/YY" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="password" id="cvv" required placeholder="123" maxlength="3">
+                    </div>
+                </div>
+                <button type="submit" class="pay-button">
+                    <span>Pay ₹</span><span id="payAmount">0.00</span>
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Payment Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="success-animation">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Payment Successful!</h2>
+            <p>Your order has been placed successfully.</p>
+            <button id="backToHome" class="back-home">Back to Home</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/nav.js"></script>
+    <script type="module" src="js/payment.js"></script>
+</body>
+</html>

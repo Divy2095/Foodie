@@ -206,7 +206,7 @@ function handleCheckout() {
         alert('Please add items to your cart before checking out');
         return;
     }
-    alert('Checkout functionality coming soon!');
+    window.location.href = 'payment.html';
 }
 
 function updateQuantity(itemName, newQuantity) {
