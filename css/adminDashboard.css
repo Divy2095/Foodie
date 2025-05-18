@@ -66,6 +66,53 @@ body {
 
 .navbar nav ul li a:hover {
     background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.navbar nav ul li a {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.navbar nav ul li a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--white);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar nav ul li a:hover::after {
+    width: 100%;
+}
+
+.navbar nav ul li a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.navbar nav ul li a.active::after {
+    width: 100%;
+}
+
+/* Section transitions */
+.orders-section,
+.menu-section {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .navbar nav ul li a.active {
@@ -223,13 +270,43 @@ body {
     display: grid;
     gap: 1rem;
     margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: 8px;
 }
 
-.order-customer {
+.order-customer,
+.order-contact,
+.order-address,
+.order-datetime,
+.delivery-status {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.5rem;
     color: var(--dark-gray);
+    font-size: 0.95rem;
+}
+
+.order-address small {
+    color: var(--dark-gray);
+    margin-left: 1.5rem;
+    font-style: italic;
+}
+
+.delivery-status {
+    margin-top: 0.5rem;
+}
+
+.delivery-status .status-pending {
+    color: var(--warning-color);
+}
+
+.delivery-status .status-delivered {
+    color: var(--success-color);
+}
+
+.delivery-status .status-transit {
+    color: var(--info-color);
 }
 
 .order-items {

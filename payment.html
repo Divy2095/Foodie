@@ -46,8 +46,22 @@
         </div>
 
         <div class="payment-section">
-            <h2>Payment Details</h2>
             <form id="paymentForm" class="payment-form">
+                <h2>Delivery Information</h2>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required placeholder="Enter 10-digit phone number" maxlength="10" pattern="[0-9]{10}">
+                </div>
+                <div class="form-group">
+                    <label for="address">Delivery Address</label>
+                    <textarea id="address" required placeholder="Enter your full delivery address" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="landmark">Landmark (Optional)</label>
+                    <input type="text" id="landmark" placeholder="Nearby landmark for easier delivery">
+                </div>
+
+                <h2>Payment Details</h2>
                 <div class="form-group">
                     <label for="name">Cardholder Name</label>
                     <input type="text" id="name" required placeholder="John Doe">

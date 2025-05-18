@@ -8,6 +8,62 @@ document.addEventListener("DOMContentLoaded", () => {
     const totalDishes = document.getElementById('totalDishes');
     const todayOrders = document.getElementById('todayOrders');
     const totalRevenue = document.getElementById('totalRevenue');
+    
+    // Navigation elements
+    const dashboardLink = document.getElementById('dashboardLink');
+    const ordersLink = document.getElementById('ordersLink');
+    const menuLink = document.getElementById('menuLink');
+    
+    // Setup navigation
+    function setupNavigation() {
+        const sections = {
+            dashboard: document.querySelector('.restaurant-info'),
+            orders: document.querySelector('.orders-section'),
+            menu: document.querySelector('.menu-section')
+        };
+        
+        function showSection(sectionId) {
+            // Update active link
+            [dashboardLink, ordersLink, menuLink].forEach(link => {
+                link.classList.remove('active');
+            });
+            document.getElementById(sectionId + 'Link')?.classList.add('active');
+            
+            // Show/hide sections
+            Object.entries(sections).forEach(([id, element]) => {
+                if (element) {
+                    if (id === sectionId) {
+                        element.style.display = 'block';
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                        element.style.display = id === 'dashboard' ? 'block' : 'none';
+                    }
+                }
+            });
+        }
+
+        // Add click handlers
+        dashboardLink?.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('dashboard');
+        });
+
+        ordersLink?.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('orders');
+        });
+
+        menuLink?.addEventListener('click', (e) => {
+            e.preventDefault();
+            showSection('menu');
+        });
+
+        // Check hash on page load
+        const hash = window.location.hash.slice(1) || 'dashboard';
+        showSection(hash);
+    }
+
+    setupNavigation();
     const rating = document.getElementById('rating');
     const menuGrid = document.getElementById('menuGrid');
     const searchDish = document.getElementById('searchDish');
@@ -164,14 +220,20 @@ document.addEventListener("DOMContentLoaded", () => {
             todayOrders.textContent = todayOrdersCount;
         }
 
-        // Calculate total revenue
+        // Calculate total revenue including delivery fees
         if (data.orders) {
             const revenue = data.orders.reduce((total, order) => {
-                // Calculate total for each order
-                const orderTotal = order.items ? order.items.reduce((sum, item) => 
-                    sum + (item.price * (item.quantity || 1)), 0
-                ) : 0;
-                return total + orderTotal;
+                // If order has total with delivery fee, use that
+                if (order.total) {
+                    return total + parseFloat(order.total);
+                }
+                // If order has itemTotal, add delivery fee
+                if (order.itemTotal) {
+                    return total + parseFloat(order.itemTotal) + (order.deliveryFee || 40);
+                }
+                // Fallback to calculating from price and quantity
+                const orderAmount = order.price * (order.quantity || 1);
+                return total + orderAmount + (order.deliveryFee || 40);
             }, 0);
             totalRevenue.textContent = `₹${revenue.toFixed(2)}`;
         }
@@ -194,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Filter orders based on selected time period
+        // Filter and sort orders
         const filterValue = orderFilter.value;
         const now = new Date();
         const filteredOrders = orders.filter(order => {
@@ -211,40 +273,54 @@ document.addEventListener("DOMContentLoaded", () => {
                 default:
                     return true;
             }
-        });
+        }).sort((a, b) => new Date(b.orderedAt) - new Date(a.orderedAt));
 
-        // Sort orders by date (newest first)
-        const sortedOrders = filteredOrders.sort((a, b) => 
-            new Date(b.orderedAt) - new Date(a.orderedAt)
-        );
+        // Display orders
+        ordersGrid.innerHTML = filteredOrders.map(order => {
+            // Calculate total including delivery fee
+            const itemTotal = order.itemTotal || (order.price * (order.quantity || 1));
+            const total = order.total || (itemTotal + (order.deliveryFee || 40));
 
-        ordersGrid.innerHTML = sortedOrders.map(order => {
-            const orderTotal = order.items ? order.items.reduce((sum, item) => 
-                sum + (item.price * (item.quantity || 1)), 0
-            ) : 0;            return `
+            return `
                 <div class="order-card">
                     <div class="order-header">
                         <span class="order-id">#${order.orderId || Math.random().toString(36).substr(2, 9)}</span>
                         <span class="order-status status-${order.orderStatus?.toLowerCase() || 'paid'}">${order.orderStatus || 'Paid'}</span>
-                    </div>
-                    <div class="order-info">
+                    </div>                    <div class="order-info">
                         <div class="order-customer">
                             <i class="fas fa-user"></i>
-                            <span>${order.userName || order.orderedBy || 'Anonymous'}</span>
+                            <span>${order.userName || order.orderedBy.split('@')[0] || 'Anonymous'}</span>
+                        </div>
+                        <div class="order-contact">
+                            <i class="fas fa-phone"></i>
+                            <span>${order.deliveryInfo?.phone || 'No phone provided'}</span>
+                        </div>
+                        <div class="order-address">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${order.deliveryInfo?.address || 'No address provided'}</span>
+                            ${order.deliveryInfo?.landmark ? `<br><small>(Landmark: ${order.deliveryInfo.landmark})</small>` : ''}
                         </div>
                         <div class="order-datetime">
                             <i class="fas fa-clock"></i>
                             <span>${formatDate(order.orderedAt)}</span>
                         </div>
+                        <div class="delivery-status">
+                            <i class="fas fa-truck"></i>
+                            <span class="status-${order.deliveryInfo?.deliveryStatus?.toLowerCase() || 'pending'}">${order.deliveryInfo?.deliveryStatus || 'Pending'}</span>
+                        </div>
                     </div>
                     <div class="order-items">
                         <div class="order-item">
                             <span>${order.name} × ${order.quantity || 1}</span>
-                            <span>₹${order.itemTotal?.toFixed(2) || (order.price * (order.quantity || 1)).toFixed(2)}</span>
+                            <span>₹${itemTotal.toFixed(2)}</span>
+                        </div>
+                        <div class="order-delivery">
+                            <span>Delivery Fee</span>
+                            <span>₹${(order.deliveryFee || 40).toFixed(2)}</span>
                         </div>
                         <div class="order-total">
                             <span>Total</span>
-                            <span>₹${order.itemTotal?.toFixed(2) || (order.price * (order.quantity || 1)).toFixed(2)}</span>
+                            <span>₹${total.toFixed(2)}</span>
                         </div>
                     </div>
                 </div>

@@ -213,29 +213,50 @@ async function handlePayment(e) {
 
             if (!restSnap.exists()) {
                 throw new Error(`Restaurant ${item.restaurantid} not found`);
-            }            const restData = restSnap.data();
-            
-            // Calculate item total
-            const itemTotal = item.price * (item.quantity || 1);
+            }
 
-            // Prepare the order item without removing restaurantid yet
+            const restData = restSnap.data();
+            
+            // Calculate totals
+            const itemTotal = item.price * (item.quantity || 1);
+            const deliveryFee = 40;
+            const orderTotal = itemTotal + deliveryFee;
+
+            // Get user's display name or format email as name
+            const userName = user.displayName || user.email.split('@')[0].replace(/[^a-zA-Z0-9]/g, ' ');            // Get delivery information
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const landmark = document.getElementById('landmark').value;
+
+            // Create order object with all necessary details
             const orderItem = {
                 ...item,
                 itemTotal: itemTotal,
+                deliveryFee: deliveryFee,
+                total: orderTotal,
                 orderedBy: user.email,
+                userName: userName,
                 orderedAt: new Date().toISOString(),
-                userName: user.displayName || user.email,
-                orderStatus: 'Paid'
+                orderStatus: 'Paid',
+                orderId: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+                deliveryInfo: {
+                    phone: phone,
+                    address: address,
+                    landmark: landmark || '',
+                    deliveryStatus: 'Pending'
+                }
             };
 
-            // Add to user's orders (remove restaurantid here)
+            // Remove restaurant ID for user's order history
             const { restaurantid, ...userOrderItem } = orderItem;
+            
+            // Add to user's orders
             updatedUserOrders.push({
                 ...userOrderItem,
                 restaurantName: restData.name
             });
 
-            // Add to restaurant's orders (keep restaurantid)
+            // Add to restaurant's orders (keeping restaurant ID)
             restaurantUpdates.push(updateDoc(restRef, {
                 orders: arrayUnion(orderItem)
             }));
