@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu - Foodie</title>
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/restaurant.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <i class="fas fa-utensils"></i>
+            <span>Foodie</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#">Menu</a></li>
+                <li><a href="#">Offers</a></li>
+                <li class="cart-icon">
+                    <a href="#" id="cartBtn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                </li>
+                <li class="user-menu">
+                    <a href="#" id="userMenuBtn">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName"></span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" id="myOrders"><i class="fas fa-shopping-bag"></i> My Orders</a>
+                        <a href="#" id="myProfile"><i class="fas fa-user"></i> My Profile</a>
+                        <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="restaurant-container">
+        <div class="restaurant-header">
+            <div class="restaurant-info">
+                <h1 id="restaurantName">Loading...</h1>
+                <div class="details">
+                    <p><i class="fas fa-map-marker-alt"></i><span id="restaurantAddress">Loading...</span></p>
+                    <p><i class="fas fa-clock"></i><span id="restaurantTiming">Loading...</span></p>
+                    <p><i class="fas fa-star"></i><span id="restaurantRating">0.0</span> Rating</p>
+                </div>
+            </div>
+            <div class="status-badge" id="statusBadge">
+                <!-- Status will be dynamically updated -->
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <div class="menu-header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="search" id="menuSearch" placeholder="Search menu items...">
+                </div>
+            </div>
+
+            <div class="menu-grid" id="menuGrid">
+                <!-- Menu items will be loaded here -->
+                <div class="loading-menu">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading menu...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Sidebar -->
+        <div class="cart-sidebar" id="cartSidebar">
+            <div class="cart-header">
+                <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+                <button id="closeCart" class="close-cart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be displayed here -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotal">₹0.00</span>
+                </div>
+                <button id="checkoutBtn" class="checkout-btn">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="js/nav.js"></script>
+    <script type="module" src="js/restaurant.js"></script>
+</body>
+</html>
