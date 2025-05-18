@@ -209,18 +209,22 @@ function handleCheckout() {
     window.location.href = 'payment.html';
 }
 
-function updateQuantity(itemName, newQuantity) {
+function updateQuantity(itemName, newQuantity, restaurantId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
     if (newQuantity < 1) {
-        cart = cart.filter(item => item.name !== itemName);
+        cart = cart.filter(item => !(item.name === itemName && item.restaurantId === restaurantId));
     } else {
-        const item = cart.find(item => item.name === itemName);
+        const item = cart.find(item => item.name === itemName && item.restaurantId === restaurantId);
         if (item) {
             item.quantity = newQuantity;
         }
     }
+
     localStorage.setItem('cart', JSON.stringify(cart));
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
     localStorage.setItem('cartCount', totalItems.toString());
+
     updateCartDisplay();
 }
 

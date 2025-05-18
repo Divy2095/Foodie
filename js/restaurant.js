@@ -1,7 +1,10 @@
-import { db } from './FirebaseConfig.js';
+import { db ,auth} from './FirebaseConfig.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
-
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 let cart = [];
+
+// Store restaurantId globally so it's accessible to all functions
+let restaurantId;
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Get elements
@@ -16,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Get restaurant ID from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const restaurantId = urlParams.get('id');
+    restaurantId = urlParams.get('id');
 
     if (!restaurantId) {
         window.location.href = 'index.html';
@@ -189,20 +192,61 @@ function loadCart() {
 }
 
 function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    // Make sure all items have restaurantid and are properly structured
+    cart = cart.map(item => {
+        // Ensure we have a restaurantid
+        if (!item.restaurantid && restaurantId) {
+            console.log('Adding missing restaurantid to item:', item.name);
+        }
+        return {
+            ...item,
+            restaurantid: item.restaurantid || restaurantId,
+            quantity: item.quantity || 1
+        };
+    });
+
+    // Save to localStorage
+    const cartString = JSON.stringify(cart);
+    localStorage.setItem('cart', cartString);
+    
+    // Keep sessionStorage in sync
+    sessionStorage.setItem('checkoutCart', cartString);
+    
     // Update global cart count
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
     localStorage.setItem('cartCount', totalItems.toString());
+    
     updateCartDisplay();
 }
 
 function addToCart(dish) {
-    const existingItem = cart.find(item => item.name === dish.name);
+    if (!auth.currentUser) {
+        window.location.href = 'login.html';
+        return;
+    }
     
+    if (!restaurantId) {
+        console.error('No restaurant ID found');
+        alert('Error adding to cart. Please try refreshing the page.');
+        return;
+    }
+
+    // Add restaurantId to the dish object
+    const dishWithRestaurant = {
+        ...dish,
+        restaurantid: restaurantId
+    };
+
+    const existingItem = cart.find(item => item.name === dish.name);
     if (existingItem) {
         existingItem.quantity = (existingItem.quantity || 1) + 1;
+        // Ensure restaurantId is set
+        existingItem.restaurantid = restaurantId;
     } else {
-        cart.push({ ...dish, quantity: 1 });
+        cart.push({ 
+            ...dishWithRestaurant,
+            quantity: 1
+        });
     }
     
     saveCart();
@@ -288,6 +332,18 @@ function handleCheckout() {
         alert('Please add items to your cart before checking out');
         return;
     }
+
+    // Verify all items have restaurantid
+    const validCart = cart.map(item => ({
+        ...item,
+        restaurantid: item.restaurantid || restaurantId
+    }));
+    
+    // Save validated cart to both storages
+    const cartString = JSON.stringify(validCart);
+    localStorage.setItem('cart', cartString);
+    sessionStorage.setItem('checkoutCart', cartString);
+    
     window.location.href = 'payment.html';
 }
 

@@ -150,6 +150,116 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Orders Section */
+.orders-section {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.orders-header h2 {
+    font-size: 1.5rem;
+    color: var(--dark-color);
+}
+
+.order-filter {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--gray);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background-color: var(--white);
+    color: var(--dark-color);
+    cursor: pointer;
+}
+
+.orders-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.order-card {
+    background-color: var(--light-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid var(--gray);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray);
+}
+
+.order-id {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.order-status {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.status-paid {
+    background-color: var(--success-color);
+    color: var(--white);
+}
+
+.order-info {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.order-customer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--dark-gray);
+}
+
+.order-items {
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.order-item:not(:last-child) {
+    border-bottom: 1px solid var(--gray);
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray);
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
 /* Restaurant Info */
 .restaurant-info {
     background-color: var(--white);

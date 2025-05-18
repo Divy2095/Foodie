@@ -1,6 +1,6 @@
 import { db, auth } from "./FirebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { doc, getDoc, updateDoc, arrayRemove } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, arrayRemove, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // Elements
@@ -12,10 +12,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const menuGrid = document.getElementById('menuGrid');
     const searchDish = document.getElementById('searchDish');
     const logoutBtn = document.getElementById('logoutBtn');
+    const ordersGrid = document.getElementById('ordersGrid');
+    const orderFilter = document.getElementById('orderFilter');
 
     // Set initial loading states
     restaurantName.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
     menuGrid.innerHTML = '<div class="loading-menu"><i class="fas fa-spinner fa-spin"></i> Loading menu...</div>';
+    ordersGrid.innerHTML = '<div class="loading-orders"><i class="fas fa-spinner fa-spin"></i> Loading orders...</div>';
+
+    let unsubscribeOrders = null; // Store the unsubscribe function
 
     // Check authentication and load restaurant data
     onAuthStateChanged(auth, async (user) => {
@@ -33,29 +38,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const restaurantRef = doc(db, "restaurants", restaurantId);
-            const restaurantDoc = await getDoc(restaurantRef);
             
-            if (restaurantDoc.exists()) {
-                const data = restaurantDoc.data();
-                restaurantName.textContent = data.name || 'Restaurant';
-                
-                // Update stats
-                updateStats(data);
-                
-                // Load menu items
-                if (data.menu && Array.isArray(data.menu)) {
-                    displayMenu(data.menu);
+            // Set up real-time orders listener
+            unsubscribeOrders = onSnapshot(restaurantRef, (doc) => {
+                if (doc.exists()) {
+                    const data = doc.data();
+                    restaurantName.textContent = data.name || 'Restaurant';
+                    
+                    // Update stats and orders
+                    updateStats(data);
+                    displayOrders(data.orders || []);
+                    
+                    // Load menu items
+                    if (data.menu && Array.isArray(data.menu)) {
+                        displayMenu(data.menu);
+                    } else {
+                        displayMenu([]);
+                    }
                 } else {
-                    displayMenu([]);
+                    restaurantName.textContent = 'Restaurant Not Found';
+                    menuGrid.innerHTML = '<div class="error-message">Restaurant data not found</div>';
+                    ordersGrid.innerHTML = '<div class="error-message">Orders data not found</div>';
                 }
-            } else {
-                restaurantName.textContent = 'Restaurant Not Found';
-                menuGrid.innerHTML = '<div class="error-message">Restaurant data not found</div>';
-            }
+            });
+
         } catch (error) {
             console.error("Error loading restaurant data:", error);
             restaurantName.textContent = 'Error Loading';
             menuGrid.innerHTML = '<div class="error-message">Failed to load menu data</div>';
+            ordersGrid.innerHTML = '<div class="error-message">Failed to load orders data</div>';
         }
     });
 
@@ -100,10 +111,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Handle order filtering
+    if (orderFilter) {
+        orderFilter.addEventListener('change', () => {
+            const restaurantId = localStorage.getItem('restaurantid');
+            if (!restaurantId) return;
+
+            refreshDashboard();
+        });
+    }
+
     // Logout functionality
     if (logoutBtn) {
         logoutBtn.addEventListener('click', async () => {
             try {
+                if (unsubscribeOrders) {
+                    unsubscribeOrders(); // Clean up the real-time listener
+                }
                 await auth.signOut();
                 localStorage.removeItem("restaurantid");
                 window.location.href = 'adminform.html';
@@ -111,6 +135,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error("Error signing out:", error);
                 alert("Failed to logout. Please try again.");
             }
+        });
+    }
+
+    function formatDate(timestamp) {
+        const date = new Date(timestamp);
+        return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
         });
     }
 
@@ -124,14 +159,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const today = new Date().toDateString();
         if (data.orders) {
             const todayOrdersCount = data.orders.filter(order => 
-                new Date(order.timestamp).toDateString() === today
+                new Date(order.orderedAt).toDateString() === today
             ).length;
             todayOrders.textContent = todayOrdersCount;
         }
 
         // Calculate total revenue
         if (data.orders) {
-            const revenue = data.orders.reduce((total, order) => total + (order.total || 0), 0);
+            const revenue = data.orders.reduce((total, order) => {
+                // Calculate total for each order
+                const orderTotal = order.items ? order.items.reduce((sum, item) => 
+                    sum + (item.price * (item.quantity || 1)), 0
+                ) : 0;
+                return total + orderTotal;
+            }, 0);
             totalRevenue.textContent = `₹${revenue.toFixed(2)}`;
         }
 
@@ -139,6 +180,76 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.rating) {
             rating.textContent = `${data.rating.toFixed(1)} ⭐`;
         }
+    }
+
+    function displayOrders(orders = []) {
+        if (!orders.length) {
+            ordersGrid.innerHTML = `
+                <div class="empty-orders">
+                    <i class="fas fa-receipt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                    <h3>No orders yet</h3>
+                    <p>New orders will appear here</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Filter orders based on selected time period
+        const filterValue = orderFilter.value;
+        const now = new Date();
+        const filteredOrders = orders.filter(order => {
+            const orderDate = new Date(order.orderedAt);
+            switch (filterValue) {
+                case 'today':
+                    return orderDate.toDateString() === now.toDateString();
+                case 'week':
+                    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    return orderDate >= weekAgo;
+                case 'month':
+                    const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                    return orderDate >= monthAgo;
+                default:
+                    return true;
+            }
+        });
+
+        // Sort orders by date (newest first)
+        const sortedOrders = filteredOrders.sort((a, b) => 
+            new Date(b.orderedAt) - new Date(a.orderedAt)
+        );
+
+        ordersGrid.innerHTML = sortedOrders.map(order => {
+            const orderTotal = order.items ? order.items.reduce((sum, item) => 
+                sum + (item.price * (item.quantity || 1)), 0
+            ) : 0;            return `
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-id">#${order.orderId || Math.random().toString(36).substr(2, 9)}</span>
+                        <span class="order-status status-${order.orderStatus?.toLowerCase() || 'paid'}">${order.orderStatus || 'Paid'}</span>
+                    </div>
+                    <div class="order-info">
+                        <div class="order-customer">
+                            <i class="fas fa-user"></i>
+                            <span>${order.userName || order.orderedBy || 'Anonymous'}</span>
+                        </div>
+                        <div class="order-datetime">
+                            <i class="fas fa-clock"></i>
+                            <span>${formatDate(order.orderedAt)}</span>
+                        </div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <span>${order.name} × ${order.quantity || 1}</span>
+                            <span>₹${order.itemTotal?.toFixed(2) || (order.price * (order.quantity || 1)).toFixed(2)}</span>
+                        </div>
+                        <div class="order-total">
+                            <span>Total</span>
+                            <span>₹${order.itemTotal?.toFixed(2) || (order.price * (order.quantity || 1)).toFixed(2)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 
     function displayMenu(menu = []) {
@@ -153,7 +264,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             `;
             return;
-        }        // Sort menu by most recently added
+        }
+
+        // Sort menu by most recently added
         const sortedMenu = [...menu].sort((a, b) => 
             new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
         );
@@ -169,7 +282,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const dishCard = document.createElement('div');
             dishCard.className = 'dish-card';
             
-            dishCard.innerHTML = `                <div class="dish-image-container">
+            dishCard.innerHTML = `
+                <div class="dish-image-container">
                     <img src="${dish.imageUrl || 'images/placeholder.jpg'}" 
                          alt="${dish.name}" 
                          class="dish-image"
@@ -188,7 +302,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
-            `;            // Add event listeners
+            `;
+            
+            // Add event listeners
             const editBtn = dishCard.querySelector('.edit-btn');
             const deleteBtn = dishCard.querySelector('.delete-btn');
             
@@ -214,15 +330,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Update stats
                 updateStats(data);
                 
-                // Load menu items
+                // Load menu items and orders
                 if (data.menu && Array.isArray(data.menu)) {
                     displayMenu(data.menu);
+                }
+                if (data.orders && Array.isArray(data.orders)) {
+                    displayOrders(data.orders);
                 }
             }
         } catch (error) {
             console.error("Error refreshing dashboard:", error);
         }
-    };    window.editDish = async (index) => {
+    };
+
+    window.editDish = async (index) => {
         try {
             const restaurantId = localStorage.getItem("restaurantid");
             if (!restaurantId) return;
@@ -268,6 +389,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 const dishToRemove = menu[index];
+
                 await updateDoc(restaurantRef, {
                     menu: arrayRemove(dishToRemove)
                 });
