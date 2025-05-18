@@ -1,12 +1,35 @@
 import { db } from './FirebaseConfig.js';
 import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
 
+// Initialize cart from localStorage
+let cart = [];
+
 document.addEventListener('DOMContentLoaded', async () => {
+    // Get elements
     const restaurantsGrid = document.getElementById('restaurantsGrid');
+    const cartBtn = document.getElementById('cartBtn');
+    const cartSidebar = document.getElementById('cartSidebar');
+    const closeCart = document.getElementById('closeCart');
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+
     const loadingElement = document.createElement('div');
     loadingElement.className = 'loading';
     loadingElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading restaurants...';
     restaurantsGrid.appendChild(loadingElement);
+    
+    // Cart functionality
+    if (cartBtn && closeCart) {
+        cartBtn.addEventListener('click', toggleCart);
+        closeCart.addEventListener('click', toggleCart);
+    }
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', handleCheckout);
+    }
+
+    // Initialize cart
+    loadCart();
     
     try {
         // Get all restaurants
@@ -108,3 +131,98 @@ function checkIfOpen(openTime, closeTime) {
     const closeTotal = closeHours * 60 + closeMinutes;
       return currentTotal >= openTotal && currentTotal <= closeTotal;
 }
+
+// Cart Functions
+function toggleCart() {
+    const cartSidebar = document.getElementById('cartSidebar');
+    cartSidebar.classList.toggle('open');
+}
+
+function loadCart() {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+        updateCartDisplay();
+    }
+    // Update cart count in the UI
+    const cartCount = document.querySelector('.cart-count');
+    if (cartCount) {
+        cartCount.textContent = localStorage.getItem('cartCount') || '0';
+    }
+}
+
+function updateCartDisplay() {
+    const cartItems = document.getElementById('cartItems');
+    const cartCount = document.querySelector('.cart-count');
+    const cartTotal = document.getElementById('cartTotal');
+    
+    if (!cartItems || !cartCount || !cartTotal) return;
+
+    // Update cart count
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    cartCount.textContent = totalItems;
+    
+    // Update cart items
+    if (cart.length === 0) {
+        cartItems.innerHTML = `
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Your cart is empty</h3>
+                <p>Add some delicious dishes to your cart</p>
+            </div>
+        `;
+        return;
+    }
+    
+    cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <img src="${item.imageUrl || 'images/placeholder.jpg'}" 
+                 alt="${item.name}" 
+                 class="cart-item-image"
+                 onerror="this.src='images/placeholder.jpg'">
+            <div class="cart-item-details">
+                <h4 class="cart-item-title">${item.name}</h4>
+                <p class="cart-item-price">₹${(item.price * (item.quantity || 1)).toFixed(2)}</p>
+                <div class="cart-item-actions">
+                    <button class="quantity-btn" onclick="updateQuantity('${item.name}', ${(item.quantity || 1) - 1})">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="cart-item-quantity">${item.quantity || 1}</span>
+                    <button class="quantity-btn" onclick="updateQuantity('${item.name}', ${(item.quantity || 1) + 1})">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    // Update total
+    const total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+    cartTotal.textContent = `₹${total.toFixed(2)}`;
+}
+
+function handleCheckout() {
+    if (cart.length === 0) {
+        alert('Please add items to your cart before checking out');
+        return;
+    }
+    alert('Checkout functionality coming soon!');
+}
+
+function updateQuantity(itemName, newQuantity) {
+    if (newQuantity < 1) {
+        cart = cart.filter(item => item.name !== itemName);
+    } else {
+        const item = cart.find(item => item.name === itemName);
+        if (item) {
+            item.quantity = newQuantity;
+        }
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    localStorage.setItem('cartCount', totalItems.toString());
+    updateCartDisplay();
+}
+
+// Make functions available globally
+window.updateQuantity = updateQuantity;

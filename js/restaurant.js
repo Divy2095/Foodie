@@ -181,10 +181,18 @@ function loadCart() {
         cart = JSON.parse(savedCart);
         updateCartDisplay();
     }
+    // Update cart count in the UI
+    const cartCount = document.querySelector('.cart-count');
+    if (cartCount) {
+        cartCount.textContent = localStorage.getItem('cartCount') || '0';
+    }
 }
 
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
+    // Update global cart count
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    localStorage.setItem('cartCount', totalItems.toString());
     updateCartDisplay();
 }
 
