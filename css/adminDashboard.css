@@ -525,6 +525,66 @@ body {
     color: var(--dark-gray);
 }
 
+/* Delivery Status Dropdown */
+.delivery-status-select {
+    padding: 0.5rem;
+    border: 1px solid var(--gray);
+    border-radius: 4px;
+    background-color: var(--white);
+    color: var(--dark-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delivery-status-select:hover {
+    border-color: var(--primary-color);
+}
+
+.delivery-status-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 87, 34, 0.1);
+}
+
+/* Status colors */
+.delivery-status-select option[value="Pending"] {
+    color: var(--warning-color);
+}
+
+.delivery-status-select option[value="Preparing"] {
+    color: var(--info-color);
+}
+
+.delivery-status-select option[value="On the Way"] {
+    color: var(--primary-color);
+}
+
+.delivery-status-select option[value="Delivered"] {
+    color: var(--success-color);
+}
+
+/* Status indicator colors */
+.status-pending {
+    background-color: var(--warning-color);
+    color: white;
+}
+
+.status-preparing {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.status-on-the-way {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.status-delivered {
+    background-color: var(--success-color);
+    color: white;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .navbar {

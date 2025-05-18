@@ -1,6 +1,6 @@
 import { db, auth } from "./FirebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { doc, getDoc, updateDoc, arrayRemove, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, arrayRemove, onSnapshot, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     // Elements
@@ -282,11 +282,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const total = order.total || (itemTotal + (order.deliveryFee || 40));
 
             return `
-                <div class="order-card">
+                <div class="order-card" data-order-id="${order.orderId}">
                     <div class="order-header">
                         <span class="order-id">#${order.orderId || Math.random().toString(36).substr(2, 9)}</span>
                         <span class="order-status status-${order.orderStatus?.toLowerCase() || 'paid'}">${order.orderStatus || 'Paid'}</span>
-                    </div>                    <div class="order-info">
+                    </div>                    
+                    <div class="order-info">
                         <div class="order-customer">
                             <i class="fas fa-user"></i>
                             <span>${order.userName || order.orderedBy.split('@')[0] || 'Anonymous'}</span>
@@ -306,7 +307,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                         <div class="delivery-status">
                             <i class="fas fa-truck"></i>
-                            <span class="status-${order.deliveryInfo?.deliveryStatus?.toLowerCase() || 'pending'}">${order.deliveryInfo?.deliveryStatus || 'Pending'}</span>
+                            <select class="delivery-status-select" data-order-id="${order.orderId}" data-user-id="${order.orderedBy}">
+                                <option value="Pending" ${order.deliveryInfo?.deliveryStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+                                <option value="Preparing" ${order.deliveryInfo?.deliveryStatus === 'Preparing' ? 'selected' : ''}>Preparing</option>
+                                <option value="On the Way" ${order.deliveryInfo?.deliveryStatus === 'On the Way' ? 'selected' : ''}>On the Way</option>
+                                <option value="Delivered" ${order.deliveryInfo?.deliveryStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                            </select>
                         </div>
                     </div>
                     <div class="order-items">
@@ -477,4 +483,67 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Failed to delete dish. Please try again.");
         }
     };
+
+    function setupStatusListeners() {
+        ordersGrid.addEventListener('change', async (e) => {
+            if (e.target.classList.contains('delivery-status-select')) {
+                const newStatus = e.target.value;
+                const orderId = e.target.dataset.orderId;
+                const userEmail = e.target.dataset.userId;
+                const restaurantId = localStorage.getItem('restaurantid');
+
+                try {
+                    // Get restaurant and user references
+                    const restaurantRef = doc(db, "restaurants", restaurantId);
+                    
+                    // Get user document by email
+                    const usersRef = collection(db, "users");
+                    const q = query(usersRef, where("email", "==", userEmail));
+                    const userSnapshot = await getDocs(q);
+                    
+                    if (userSnapshot.empty) {
+                        throw new Error('User not found');
+                    }
+
+                    const userDoc = userSnapshot.docs[0];
+                    const userRef = doc(db, "users", userDoc.id);
+                    
+                    // Update restaurant's order
+                    const restDoc = await getDoc(restaurantRef);
+                    const orders = restDoc.data().orders;
+                    const orderIndex = orders.findIndex(o => o.orderId === orderId);
+                    
+                    if (orderIndex !== -1) {
+                        orders[orderIndex].deliveryInfo.deliveryStatus = newStatus;
+                        await updateDoc(restaurantRef, { orders: orders });
+                    }
+
+                    // Update user's order
+                    const userData = userDoc.data();
+                    const userOrders = userData.orders || [];
+                    const userOrderIndex = userOrders.findIndex(o => o.orderId === orderId);
+                    
+                    if (userOrderIndex !== -1) {
+                        userOrders[userOrderIndex].deliveryInfo.deliveryStatus = newStatus;
+                        await updateDoc(userRef, { orders: userOrders });
+                    }
+
+                    // Show success message
+                    alert('Order status updated successfully!');
+
+                } catch (error) {
+                    console.error('Error updating order status:', error);
+                    alert('Failed to update order status. Please try again.');
+                    // Reset select to previous value
+                    const currentStatus = e.target.parentNode.querySelector('span').textContent;
+                    e.target.value = currentStatus;
+                }
+            }
+        });
+    }
+
+    // Call setupStatusListeners after orders are displayed
+    setupStatusListeners();
+    
+    // Other existing functions...
 });
