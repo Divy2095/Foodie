@@ -79,11 +79,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let unsubscribeOrders = null; // Store the unsubscribe function
 
     // Check authentication and load restaurant data
-    onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-            window.location.href = 'adminform.html';
-            return;
-        }
+    // onAuthStateChanged(auth, async (user) => {
+    //     if (!user) {
+    //         window.location.href = 'adminform.html';
+    //         return;
+    //     }
 
         // Get restaurant data
         const restaurantId = localStorage.getItem('restaurantid');
@@ -546,4 +546,4 @@ document.addEventListener("DOMContentLoaded", () => {
     setupStatusListeners();
     
     // Other existing functions...
-});
+// });

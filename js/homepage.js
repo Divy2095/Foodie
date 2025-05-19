@@ -78,9 +78,11 @@ function createRestaurantCard(restaurant, restaurantId) {
 
     const openingTime = restaurant.open || '09:00';
     const closingTime = restaurant.close || '22:00';
-    const isOpen = checkIfOpen(openingTime, closingTime);
-
-    card.innerHTML = `
+    const isOpen = checkIfOpen(openingTime, closingTime);    card.innerHTML = `
+        <img src="${restaurant.imageUrl || 'images/placeholder.jpg'}" 
+             alt="${restaurant.name}" 
+             class="restaurant-image"
+             onerror="this.src='images/placeholder.jpg'">
         <div class="restaurant-header">
             <h3>${restaurant.name}</h3>
             <span class="status ${isOpen ? 'open' : 'closed'}">
